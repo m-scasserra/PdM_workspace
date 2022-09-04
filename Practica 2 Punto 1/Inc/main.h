@@ -34,7 +34,7 @@
 typedef uint32_t tick_t;
 
 typedef bool bool_t;
-
+/* Structure of delay_t with 3 parameters*/
 typedef struct{
 	tick_t startTime;
 	tick_t duration;

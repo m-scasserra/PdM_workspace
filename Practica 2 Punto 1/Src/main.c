@@ -33,9 +33,13 @@
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
+
+/* Time for the LEDs between blinks*/
 uint8_t delayLED1 = 100;
 uint16_t delayLED2 = 500;
 uint16_t delayLED3 = 1000;
+
+/* Delays structures used for the LEDs*/
 delay_t timerLED1;
 delay_t timerLED2;
 delay_t timerLED3;
@@ -49,12 +53,23 @@ static void SystemClock_Config(void);
 static void Error_Handler(void);
 
 /* Private functions ---------------------------------------------------------*/
+/**
+ * @brief  Initializes a delay
+ * @param  *delay pointer to the delay structure
+ * @param  duration duration of the delay
+ * @retval None
+ */
 void delayInit(delay_t *delay, tick_t duration){
 	delay->duration = duration;
 	delay->running = false;
 	delay->startTime = 0;
 }
 
+/**
+ * @brief  Reads the current time of the delay, if the delay is not running it initializes it
+ * @param  *delay pointer to the delay strucure
+ * @retval True if its running, otherwise returns false
+ */
 bool_t delayRead(delay_t *delay){
 	if(delay->running == false){
 		delay->startTime = HAL_GetTick();
@@ -65,16 +80,21 @@ bool_t delayRead(delay_t *delay){
 			delay->startTime = 0;
 			return true;
 		}
-		return false;
 	}
 	return false;
 }
 
+/**
+ * @brief  Rewrites the duration of a delay
+ * @param  *delay pointer to the delay structure
+ * @param  duration new duration for the delay
+ * @retval None
+ */
 void delayWrite(delay_t *delay, tick_t duration){
 	delay->duration = duration;
 }
 /**
- * @brief  Main program
+ * @brief  Main program, blinks LED1, LED2 and LED3 every set amount of time
  * @param  None
  * @retval None
  */
