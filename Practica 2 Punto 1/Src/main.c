@@ -54,15 +54,18 @@ static void Error_Handler(void);
 
 /* Private functions ---------------------------------------------------------*/
 /**
- * @brief  Initializes a delay
+ * @brief  Initializes a delay of miliseconds
  * @param  *delay pointer to the delay structure
- * @param  duration duration of the delay
+ * @param  duration duration of the delay, must be a positive integer
  * @retval None
  */
 void delayInit(delay_t *delay, tick_t duration){
-	delay->duration = duration;
-	delay->running = false;
-	delay->startTime = 0;
+	if(duration > 0){
+		delay->duration = duration;
+		delay->running = false;
+		delay->startTime = 0;
+	}
+	return;
 }
 
 /**
@@ -85,13 +88,16 @@ bool_t delayRead(delay_t *delay){
 }
 
 /**
- * @brief  Rewrites the duration of a delay
+ * @brief  Rewrites the duration of a delay in miliseconds
  * @param  *delay pointer to the delay structure
- * @param  duration new duration for the delay
+ * @param  duration new duration for the delay, must be a positive integer
  * @retval None
  */
 void delayWrite(delay_t *delay, tick_t duration){
-	delay->duration = duration;
+	if(duration > 0){
+		delay->duration = duration;
+	}
+	return;
 }
 /**
  * @brief  Main program, blinks LED1, LED2 and LED3 every set amount of time
