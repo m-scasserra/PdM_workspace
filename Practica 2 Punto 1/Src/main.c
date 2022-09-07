@@ -20,6 +20,8 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include <stdbool.h>
+#include <stddef.h>
 
 /** @addtogroup STM32F4xx_HAL_Examples
  * @{
@@ -60,12 +62,15 @@ static void Error_Handler(void);
  * @retval None
  */
 void delayInit(delay_t *delay, tick_t duration){
-	if(duration > 0){
+	if(delay != NULL && duration > 0){
 		delay->duration = duration;
 		delay->running = false;
 		delay->startTime = 0;
+	}else{
+		while(1){
+
+		}
 	}
-	return;
 }
 
 /**
@@ -74,19 +79,26 @@ void delayInit(delay_t *delay, tick_t duration){
  * @retval True if its running, otherwise returns false
  */
 bool_t delayRead(delay_t *delay){
-	if(delay->running == false){
-		delay->startTime = HAL_GetTick();
-		delay->running = true;
+	bool timerFinish = false;
+
+	if(delay != NULL){
+		if(delay->running == false){
+			delay->startTime = HAL_GetTick();
+			delay->running = true;
+		}else{
+			if(HAL_GetTick() - delay->startTime >= delay->duration){
+				delay->running = false;
+				delay->startTime = 0;
+				timerFinish = true;
+			}
+		}
+		return timerFinish;
+
 	}else{
-		if(HAL_GetTick() - delay->startTime >= delay->duration){
-			delay->running = false;
-			delay->startTime = 0;
-			return true;
+		while(1){
 		}
 	}
-	return false;
 }
-
 /**
  * @brief  Rewrites the duration of a delay in miliseconds
  * @param  *delay pointer to the delay structure
@@ -94,10 +106,12 @@ bool_t delayRead(delay_t *delay){
  * @retval None
  */
 void delayWrite(delay_t *delay, tick_t duration){
-	if(duration > 0){
+	if(delay != NULL && duration > 0){
 		delay->duration = duration;
+	}else{
+		while(1){
+		}
 	}
-	return;
 }
 /**
  * @brief  Main program, blinks LED1, LED2 and LED3 every set amount of time
