@@ -104,7 +104,7 @@ int main(void)
 	 * Both dimensions of the array must have the same length and the second dimension
 	 * must be given a length.*/
 	uint16_t ledSequence[][3] = {{LED1, LED2, LED3},
-								 {200 , 200 , 200 }};
+			{200 , 200 , 200 }};
 
 	/* totalSequence is a positive int with the size of the array ledSequence*/
 	uint8_t totalSequence = sizeof ledSequence[0] / sizeof ledSequence[0][0];
