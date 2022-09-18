@@ -1,6 +1,6 @@
 /**
  ******************************************************************************
- * @file    Practica 3/Src/main.c
+ * @file    Practica3/Src/main.c
  * @author  Marco Scasserra
  * @brief   First implementation of the modularized non blocking Timer routine
  * 			with a example program that blinks Built In LEDs from the dev board

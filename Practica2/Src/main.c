@@ -1,6 +1,6 @@
 /**
  ******************************************************************************
- * @file    Practica 2/Src/main.c
+ * @file    Practica2/Src/main.c
  * @author  MCD Application Team
  * @brief   Implementation of a non blocking timer routine
  ******************************************************************************
