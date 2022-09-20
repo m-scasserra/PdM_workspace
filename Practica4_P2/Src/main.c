@@ -142,7 +142,7 @@ int main(void)
 	/* Infinite loop */
 	while (1)
 	{
-		debounceFSM_update();
+		debounceFSM_Update();
 		LED2FSM_update();
 		if(delayRead(&timerLED)){
 			BSP_LED_Toggle(LED2);

@@ -110,6 +110,6 @@ void debounceFSM_Update(){
 			}
 		break;
 		default:
-			debounceFSM_init();
+			debounceFSM_Init();
 	}
 }
