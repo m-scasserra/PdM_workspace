@@ -1,10 +1,10 @@
 /**
  ******************************************************************************
- * @file    Practica4_P2/Src/main.c
+ * @file    Practica5_P1/Src/main.c
  * @author  Marco Scasserra
- * @brief   First implementation of the modularization of the debouncing routine
- * 			with a example program that toggles the Built In LED1 and LED3. If the button is pressed
- * 			toggles LED1 and if the button is released toggles LED3
+ * @brief   First implementation of the modularization of the UART routine
+ * 			with a example program that sends the char received back and if
+ * 			that char is "a" it will toggle on and off the builtin LED1.
  ******************************************************************************
  * @attention
  *
@@ -41,6 +41,9 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
+
+/* Time it will wait between reading the received char*/
+#define TIMEBETWEENCOMMS 100
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 
@@ -52,61 +55,19 @@ UART_HandleTypeDef UartHandle;
 
 static void SystemClock_Config(void);
 static void Error_Handler(void);
-void LED2FSM_init();
-void LED2FSM_update();
 
 /* Global variables ----------------------------------------------------------*/
+
+/* UART structure for the communication*/
 UART_HandleTypeDef UartHandle;
-
-typedef enum{
-	LED_FAST,
-	LED_SLOW
-} ledState_t;
-
-ledState_t LED2State;
-
-/* Delays structures used for the LEDs*/
-delay_t timerLED;
+/* Delay structure for the delay between comms*/
+delay_t commDelay;
 
 /* Private functions ---------------------------------------------------------*/
 
 /**
- * @brief  LED2FSM_init, initializes the LED2 FSM
- * @param  None
- * @retval None
- */
-void LED2FSM_Init(){
-	LED2State = LED_FAST;
-	/* Initialize the timer struct for the LED*/
-	delayInit(&timerLED, LED_TIMER_FAST);
-}
-
-/**
- * @brief  LED2FSM_update, updates the LED2 FSM
- * @param  None
- * @retval None
- */
-void LED2FSM_update(){
-	switch(LED2State){
-		case LED_FAST:
-			if(readKey()){
-				LED2State = LED_SLOW;
-				delayWrite(&timerLED, LED_TIMER_SLOW);
-			}
-		break;
-		case LED_SLOW:
-			if(readKey()){
-				LED2State = LED_FAST;
-				delayWrite(&timerLED, LED_TIMER_FAST);
-			}
-		break;
-		default:
-			LED2FSM_Init();
-	}
-}
-
-/**
- * @brief  Main program, blinks LED1, LED2 and LED3 every set amount of time
+ * @brief  Main program, initializes the UART api and sends back the received
+ * 		   char and if that char is "a" toggles the builtin LED1
  * @param  None
  * @retval None
  */
@@ -129,28 +90,28 @@ int main(void)
 
 	/* Private variables ---------------------------------------------------------*/
 
-	/* Initialize the LED2 FSM*/
-	LED2FSM_Init();
+	/* Initialize a delay to see the UART communication*/
+	delayInit(&commDelay, TIMEBETWEENCOMMS);
 
-	/* Initialize BSP Led for LED2*/
+	/* Initialize BSP Led for LED1*/
 	BSP_LED_Init(LED1);
-	BSP_LED_Init(LED2);
 
 	/* Initialize BSP Button for the BuiltIn Button*/
 	BSP_PB_Init(BUTTON_USER, BUTTON_MODE_GPIO);
 
-	/* Initialize the FSM for the debouncing*/
-	debounceFSM_Init();
+	/* Initialize the UART transmission*/
+	if(!uartInit(&UartHandle)){
+		Error_Handler();
+	}
 
-	uartInit(&UartHandle);
+	/* Char variable where it receives the character transmitted by the PC*/
 	char rxMessage[1];
+
 	/* Infinite loop */
 	while (1)
 	{
-		uartReceiveStringSize(&UartHandle, rxMessage, 1);
-		debounceFSM_Update();
-		LED2FSM_update();
-		if(delayRead(&timerLED)){
+		if(delayRead(&commDelay)){
+			uartReceiveStringSize(&UartHandle, rxMessage, 1);
 			if(!strcmp(rxMessage, "a")){
 				BSP_LED_Toggle(LED1);
 			}
@@ -158,7 +119,6 @@ int main(void)
 				uartSendString(&UartHandle, rxMessage);
 				strcpy(rxMessage, "");
 			}
-			BSP_LED_Toggle(LED2);
 		}
 	}
 }
