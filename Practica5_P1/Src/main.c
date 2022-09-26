@@ -28,8 +28,8 @@
 #include "API_uart.h"
 
 /* Defines --------------------------------------------------------------------*/
-#define LED_TIMER_FAST 200
-#define LED_TIMER_SLOW 500
+/* Time it will wait between reading the received char*/
+#define TIMEBETWEENCOMMS 100
 
 /** @addtogroup STM32F4xx_HAL_Examples
  * @{
@@ -41,9 +41,6 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
-
-/* Time it will wait between reading the received char*/
-#define TIMEBETWEENCOMMS 100
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 
