@@ -8,5 +8,6 @@ Entorno: STMCUBE
 - Practica 1.1 Secuencia de LEDs
 - Practica 1.2 Control de secuencia de LEDs mediante la lectura de un pulsador
 - Practica 2 Secuencias de LEDs no bloqueantes
-- Practica 3 Modularizacion de funciones de delay no bloqueantes
-- Practica 4 Modularizacion de funciones de deteccion de flancos y antirebote
+- Practica 3 Modularizacion de funciones de delay no bloqueantes con ejemplos
+- Practica 4 Modularizacion de funciones de deteccion de flancos y antirebote con ejemplos
+- Practica 5 Modularizacion de funciones para la comunicacion UART con ejemplos
